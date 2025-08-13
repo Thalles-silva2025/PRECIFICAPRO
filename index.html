@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precifica Pro – Hub Business</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .btn { font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; }
+        .btn-primary { background-color: #4f46e5; color: white; }
+        .btn-primary:hover { background-color: #4338ca; }
+        .btn-secondary { background-color: #e5e7eb; color: #374151; }
+        .btn-secondary:hover { background-color: #d1d5db; }
+        .input-field { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .input-field:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
+        .input-field:disabled { background-color: #f3f4f6; cursor: not-allowed; }
+        .tab { padding: 0.75rem 1.5rem; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; color: #6b7280; }
+        .tab.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tooltip-container { position: relative; display: inline-block; }
+        .tooltip-icon { cursor: pointer; color: #9ca3af; border: 1px solid #d1d5db; border-radius: 9999px; width: 1.25rem; height: 1.25rem; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; margin-left: 0.25rem; }
+        .tooltip-text { visibility: hidden; width: 220px; background-color: #1f2937; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.875rem; font-weight: normal; }
+        .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            .printable-area, .printable-area * { visibility: visible; }
+            .printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- PÁGINA DE ACESSO -->
+    <div id="login-page" class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div class="max-w-md w-full text-center">
+            <img src="https://i.imgur.com/U52RoI9.png" alt="Logomarca Hub Business" class="mx-auto h-24 w-auto mb-4">
+            <h2 class="text-2xl font-bold" style="color: #2563eb;">Transformamos empreendedores normais em empresários profissionais.</h2>
+            <div class="card p-8 mt-8 text-left">
+                <p class="text-center text-gray-600 mb-6">A ferramenta que transforma seus custos em lucro real. Preencha para ter acesso instantâneo.</p>
+                <form id="access-form" class="space-y-4">
+                    <div><label for="full-name" class="block text-sm font-medium text-gray-700">Nome e Sobrenome</label><input type="text" id="full-name" class="input-field mt-1" required></div>
+                    <div><label for="company-name" class="block text-sm font-medium text-gray-700">Nome da Empresa</label><input type="text" id="company-name" class="input-field mt-1" required></div>
+                    <div><label for="email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="email" class="input-field mt-1" required></div>
+                    <div><label for="phone" class="block text-sm font-medium text-gray-700">Telefone com WhatsApp</label><input type="tel" id="phone" class="input-field mt-1" required></div>
+                    <div class="pt-4"><button type="submit" class="btn btn-primary w-full">Iniciar Diagnóstico</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA DE DIAGNÓSTICO -->
+    <div id="diagnostic-page" class="hidden min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div class="max-w-3xl w-full">
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold text-center mb-2">Diagnóstico: Meu Preço é Estratégico?</h2>
+                <p class="text-center text-gray-600 mb-6">Responda ao checklist para avaliar a maturidade da sua precificação. "Sim" vale 1 ponto. Meta: ≥ 12 pontos.</p>
+                <form id="diagnostic-form" class="space-y-4">
+                    <input type="hidden" id="diag-full-name" name="entry.1879990263"><input type="hidden" id="diag-company-name" name="entry.1213946989"><input type="hidden" id="diag-email" name="entry.1582214760"><input type="hidden" id="diag-phone" name="entry.1472596839">
+                    <div class="p-4 border rounded-lg space-y-2"><p>1. Tenho o custo total unitário calculado para meus 10 itens/serviços mais vendidos?</p><div class="flex gap-4"><input type="radio" name="entry.1810485259" value="Sim" required><label>Sim</label><input type="radio" name="entry.1810485259" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>2. Atualizei esses custos nos últimos 30 dias?</p><div class="flex gap-4"><input type="radio" name="entry.710690631" value="Sim" required><label>Sim</label><input type="radio" name="entry.710690631" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>3. Minhas despesas fixas estão alocadas por unidade/hora com base no volume mensal atual?</p><div class="flex gap-4"><input type="radio" name="entry.1019568716" value="Sim" required><label>Sim</label><input type="radio" name="entry.1019568716" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>4. Conheço minha alíquota efetiva de impostos/taxas sobre venda?</p><div class="flex gap-4 items-center"><input type="radio" name="entry.77585905" value="Sim" required><label>Sim</label><input type="radio" name="entry.77585905" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>5. Aplico comissão de vendas no cálculo do preço?</p><div class="flex gap-4 items-center"><input type="radio" name="entry.930786213" value="Sim" required><label>Sim</label><input type="radio" name="entry.930786213" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>6. Defini margens-alvo por categoria (A/B/C) e uso no cálculo?</p><div class="flex gap-4"><input type="radio" name="entry.844486669" value="Sim" required><label>Sim</label><input type="radio" name="entry.844486669" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>7. Consigo calcular o preço sugerido usando a fórmula Preço = Custo Total / (1 – %margem – %impostos – %comissão)?</p><div class="flex gap-4"><input type="radio" name="entry.512870284" value="Sim" required><label>Sim</label><input type="radio" name="entry.512870284" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>8. Meu preço atual está ≥ preço sugerido nos itens líderes?</p><div class="flex gap-4 items-center"><input type="radio" name="entry.1249680689" value="Sim" required><label>Sim</label><input type="radio" name="entry.1249680689" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>9. Acompanho variação vs. preço sugerido mensalmente?</p><div class="flex gap-4"><input type="radio" name="entry.107968602" value="Sim" required><label>Sim</label><input type="radio" name="entry.107968602" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>10. Tenho comparativo de concorrentes nos 5 itens/serviços chave?</p><div class="flex gap-4"><input type="radio" name="entry.1877060719" value="Sim" required><label>Sim</label><input type="radio" name="entry.1877060719" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>11. Possuo um critério de ajuste (ex.: se variação > R$ X ou < –R$ Y, revisar)?</p><div class="flex gap-4"><input type="radio" name="entry.1087105471" value="Sim" required><label>Sim</label><input type="radio" name="entry.1087105471" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>12. Meus pontos de equilíbrio por linha estão mapeados?</p><div class="flex gap-4"><input type="radio" name="entry.559649257" value="Sim" required><label>Sim</label><input type="radio" name="entry.559649257" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>13. Ajustei preço ou custo em pelo menos 1 item nas últimas 4 semanas com base no diagnóstico?</p><div class="flex gap-4"><input type="radio" name="entry.1987875430" value="Sim" required><label>Sim</label><input type="radio" name="entry.1987875430" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>14. Tenho um plano de pacotes/âncoras quando o preço sugerido extrapola o mercado?</p><div class="flex gap-4"><input type="radio" name="entry.1325995433" value="Sim" required><label>Sim</label><input type="radio" name="entry.1325995433" value="Não"><label>Não</label></div></div>
+                    <div class="p-4 border rounded-lg space-y-2"><p>15. Realizo revisão mensal de fixo/volume e trimestral de margens?</p><div class="flex gap-4"><input type="radio" name="entry.55838869" value="Sim" required><label>Sim</label><input type="radio" name="entry.55838869" value="Não"><label>Não</label></div></div>
+                    <div class="pt-4"><button type="submit" class="btn btn-primary w-full">Finalizar Diagnóstico</button></div>
+                </form>
+            </div>
+            <div id="diagnostic-result-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full text-center">
+                    <h2 class="text-2xl font-bold mb-4">Resultado do Diagnóstico</h2>
+                    <div id="diagnostic-result-content" class="p-6 rounded-lg mb-6"><p id="diagnostic-score" class="text-5xl font-bold"></p><p id="diagnostic-level" class="text-xl font-semibold mt-2"></p><p id="diagnostic-summary" class="text-gray-600 mt-4"></p></div>
+                    <button id="go-to-tool-btn" class="btn btn-primary">Acessar Ferramenta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FERRAMENTA PRINCIPAL (escondida inicialmente) -->
+    <div id="main-tool" class="hidden">
+        <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-8 no-print">
+                <img src="https://i.imgur.com/U52RoI9.png" alt="Logomarca da Empresa" class="mx-auto h-24 w-auto mb-4">
+                <h1 class="text-4xl font-bold text-gray-900">Precifica Pro</h1>
+                <p class="text-lg text-gray-600 mt-2">Sua plataforma completa para precificação estratégica.</p>
+            </header>
+
+            <div class="mb-8 border-b border-gray-200 no-print">
+                <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                    <button class="tab active" data-tab="dashboard">Dashboard</button>
+                    <button class="tab" data-tab="calculator">Calculadora Unitária</button>
+                    <button class="tab" data-tab="target-cost">Custo Meta</button>
+                    <button class="tab" data-tab="mix-products">Análise de Mix de Produtos</button>
+                    <button class="tab" data-tab="mix-services">Análise de Mix de Serviços</button>
+                </nav>
+            </div>
+
+            <!-- Conteúdo do Dashboard -->
+            <div id="dashboard-content" class="tab-content active">
+                <div class="card p-6 md:p-8">
+                    <h2 class="text-2xl font-bold mb-6">Dashboard Estratégico</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Receita Total (Produtos)</h4><p id="db-product-revenue" class="text-3xl font-bold text-blue-600">R$ 0,00</p></div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Margem Média (Produtos)</h4><p id="db-product-margin" class="text-3xl font-bold text-green-600">0.00%</p></div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Ponto de Equilíbrio (Principal Item)</h4><p id="db-breakeven" class="text-3xl font-bold text-indigo-600">N/A</p></div>
+                    </div>
+                    <p class="text-center text-gray-500 mt-8">Utilize as outras abas para calcular e popular os dados do seu dashboard.</p>
+                </div>
+            </div>
+
+            <!-- Conteúdo da Calculadora Unitária -->
+            <div id="calculator-content" class="tab-content">
+                 <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <div class="card p-6 md:p-8">
+                            <h2 class="text-2xl font-bold mb-6">Calculadora Unitária</h2>
+                            <form id="pricing-form" class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">1. Tipo de Negócio</label>
+                                    <div class="grid grid-cols-3 gap-4"><input type="radio" name="business-type" id="type-product" value="product" class="sr-only" checked><label for="type-product" class="radio-label">📦 Produto</label><input type="radio" name="business-type" id="type-service" value="service" class="sr-only"><label for="type-service" class="radio-label">💼 Serviço</label><input type="radio" name="business-type" id="type-industry" value="industry" class="sr-only"><label for="type-industry" class="radio-label">🏭 Indústria</label></div>
+                                </div>
+                                <div><label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">2. Nome do Produto/Serviço</label><input type="text" id="product-name" class="input-field" placeholder="Ex: Consultoria de Marketing" required></div>
+                                <div id="fixed-costs-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div><label class="block text-sm font-medium text-gray-700 mb-1">3. Custo Fixo Total Mensal (R$)</label><input type="number" id="total-fixed-costs" class="input-field" placeholder="Soma de aluguel, salários..." required></div>
+                                    <div><label class="block text-sm font-medium text-gray-700 mb-1">4. Quantidade Produzida/Vendida no Mês</label><input type="number" id="monthly-quantity" class="input-field" placeholder="Total de unidades" required></div>
+                                </div>
+                                <div>
+                                    <label for="industry-sector" class="block text-sm font-medium text-gray-700 mb-1">5. Ramo de Atuação</label>
+                                    <select id="industry-sector" class="input-field bg-white" required>
+                                        <option value="" disabled selected>Selecione um setor</option>
+                                        <option value="alimentacao">Alimentação e Bebidas</option>
+                                        <option value="varejo_moda">Varejo de Moda e Acessórios</option>
+                                        <option value="saude">Saúde e Bem-estar (Clínicas, Academias)</option>
+                                        <option value="beleza">Beleza e Estética</option>
+                                        <option value="consultoria">Consultoria e Serviços B2B</option>
+                                        <option value="tecnologia">Tecnologia e SaaS</option>
+                                        <option value="educacao">Educação (Cursos, Escolas)</option>
+                                        <option value="construcao">Construção Civil e Reformas</option>
+                                        <option value="turismo">Turismo e Hotelaria</option>
+                                        <option value="eventos">Eventos e Entretenimento</option>
+                                        <option value="automotivo">Serviços Automotivos</option>
+                                        <option value="imobiliario">Mercado Imobiliário</option>
+                                        <option value="marketing">Marketing e Publicidade</option>
+                                        <option value="ecommerce">E-commerce (Geral)</option>
+                                        <option value="artesanato">Artesanato e Produtos Manuais</option>
+                                        <option value="pet">Pet Shops e Serviços para Animais</option>
+                                        <option value="limpeza">Serviços de Limpeza e Conservação</option>
+                                        <option value="logistica">Logística e Transporte</option>
+                                        <option value="grafica">Gráfica e Comunicação Visual</option>
+                                        <option value="varejo_casa">Varejo de Casa e Decoração</option>
+                                        <option value="varejo_eletro">Varejo de Eletrônicos</option>
+                                        <option value="industria_leve">Indústria Leve</option>
+                                        <option value="agronegocio">Agronegócio</option>
+                                        <option value="financeiro">Serviços Financeiros</option>
+                                        <option value="juridico">Serviços Jurídicos</option>
+                                        <option value="telecom">Telecomunicações</option>
+                                        <option value="energia">Energia</option>
+                                        <option value="cultura">Cultura e Arte</option>
+                                        <option value="esporte">Esportes e Lazer</option>
+                                        <option value="reciclagem">Meio Ambiente e Reciclagem</option>
+                                        <option value="outro">Outro (especificar)</option>
+                                    </select>
+                                    <input type="text" id="industry-sector-other" class="input-field mt-2 hidden" placeholder="Qual o seu ramo de atuação?">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div><label for="unit-cost" class="block text-sm font-medium text-gray-700 mb-1">6. Custo Direto Unitário (R$)</label><input type="number" id="unit-cost" class="input-field" placeholder="Matéria-prima, mercadoria" step="0.01" required></div>
+                                    <div><label for="additional-expenses" class="block text-sm font-medium text-gray-700 mb-1">7. Despesas Variáveis Unitárias</label><input type="number" id="additional-expenses" class="input-field" placeholder="Comissão, frete, embalagem" step="0.01" required></div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                                    <div><label for="taxes" class="block text-sm font-medium text-gray-700 mb-1">8. Impostos sobre a Venda (%)</label><input type="number" id="taxes" class="input-field" placeholder="Ex: 8" step="0.01" required></div>
+                                    <div><select id="expense-type" class="input-field bg-white"><option value="percent">% (sobre a venda)</option><option value="value">R$ (valor fixo)</option></select></div>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg text-center">
+                                    <p class="font-medium text-gray-700">Escolha UMA das opções abaixo:</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                                        <div><label for="sale-price" class="block text-sm font-medium text-gray-700 mb-1">Analisar Preço de Venda (R$)</label><input type="number" id="sale-price" class="input-field" placeholder="Ex: 150,00" step="0.01"></div>
+                                        <div><label for="desired-margin" class="block text-sm font-medium text-gray-700 mb-1">Formar Preço com Margem (%)</label><input type="number" id="desired-margin" class="input-field" placeholder="Ex: 40" step="0.01"></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-4 pt-4"><button type="submit" class="btn btn-primary w-full sm:w-auto">Calcular</button><button type="button" id="clear-btn" class="btn btn-secondary w-full sm:w-auto">Limpar</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    <aside>
+                        <div id="results-section" class="space-y-6" style="display:none;">
+                            <!-- O conteúdo aqui será gerado dinamicamente pelo JS -->
+                        </div>
+                    </aside>
+                </main>
+            </div>
+
+            <!-- Outras abas ... -->
+            <div id="target-cost-content" class="tab-content">
+                <!-- Conteúdo Custo Meta -->
+            </div>
+            <div id="mix-products-content" class="tab-content">
+                <!-- Conteúdo Mix Produtos -->
+            </div>
+            <div id="mix-services-content" class="tab-content">
+                <!-- Conteúdo Mix Serviços -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ... (todo o código JS da ferramenta principal) ...
+    </script>
+</body>
+</html>

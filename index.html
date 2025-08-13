@@ -115,9 +115,10 @@
             <div id="dashboard-content" class="tab-content active">
                 <div class="card p-6 md:p-8">
                     <h2 class="text-2xl font-bold mb-6">Dashboard Estratégico</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Receita Total (Produtos)</h4><p id="db-product-revenue" class="text-3xl font-bold text-blue-600">R$ 0,00</p></div>
                         <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Margem Média (Produtos)</h4><p id="db-product-margin" class="text-3xl font-bold text-green-600">0.00%</p></div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Ticket Médio (Produtos)</h4><p id="db-product-ticket" class="text-3xl font-bold text-purple-600">R$ 0,00</p></div>
                         <div class="bg-gray-50 p-4 rounded-lg text-center"><h4 class="text-sm font-semibold text-gray-600">Ponto de Equilíbrio (Principal Item)</h4><p id="db-breakeven" class="text-3xl font-bold text-indigo-600">N/A</p></div>
                     </div>
                     <p class="text-center text-gray-500 mt-8">Utilize as outras abas para calcular e popular os dados do seu dashboard.</p>
@@ -180,12 +181,12 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div><label for="unit-cost" class="block text-sm font-medium text-gray-700 mb-1">6. Custo Direto Unitário (R$)</label><input type="number" id="unit-cost" class="input-field" placeholder="Matéria-prima, mercadoria" step="0.01" required></div>
-                                    <div><label for="additional-expenses" class="block text-sm font-medium text-gray-700 mb-1">7. Despesas Variáveis Unitárias</label><input type="number" id="additional-expenses" class="input-field" placeholder="Comissão, frete, embalagem" step="0.01" required></div>
+                                    <div class="flex gap-2 items-end">
+                                        <div class="flex-grow"><label for="additional-expenses" class="block text-sm font-medium text-gray-700 mb-1">7. Despesas Variáveis Unitárias</label><input type="number" id="additional-expenses" class="input-field" placeholder="Comissão, frete" step="0.01" required></div>
+                                        <select id="expense-type" class="input-field bg-white w-24"><option value="percent">%</option><option value="value">R$</option></select>
+                                    </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                                    <div><label for="taxes" class="block text-sm font-medium text-gray-700 mb-1">8. Impostos sobre a Venda (%)</label><input type="number" id="taxes" class="input-field" placeholder="Ex: 8" step="0.01" required></div>
-                                    <div><select id="expense-type" class="input-field bg-white"><option value="percent">% (sobre a venda)</option><option value="value">R$ (valor fixo)</option></select></div>
-                                </div>
+                                <div><label for="taxes" class="block text-sm font-medium text-gray-700 mb-1">8. Impostos sobre a Venda (%)</label><input type="number" id="taxes" class="input-field" placeholder="Ex: 8" step="0.01" required></div>
                                 <div class="p-4 bg-gray-50 rounded-lg text-center">
                                     <p class="font-medium text-gray-700">Escolha UMA das opções abaixo:</p>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
